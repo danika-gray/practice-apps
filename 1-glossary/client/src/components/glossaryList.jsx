@@ -1,12 +1,12 @@
 import React from "react";
 import GlossaryTerm from "./glossaryTerm.jsx";
 
-const GlossaryList = ({terms}) => (
+const GlossaryList = ({terms, handleEdit, handleDelete}) => (
  <table>
     <tbody>
       {terms.map((term) => {
-        console.log(term);
-        return < GlossaryTerm term={term} />
+        return < GlossaryTerm term={term} handleEdit={handleEdit}
+        handleDelete={handleDelete}/>
       })}
     </tbody>
   </table>
