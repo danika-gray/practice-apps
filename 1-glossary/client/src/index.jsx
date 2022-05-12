@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { render } from "react-dom";
 import GlossaryList from "./components/glossaryList.jsx";
 import InputTerm from "./components/inputTerm.jsx";
@@ -7,8 +8,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      terms: [{term: 'dog', definition: 'a beloved canine pet', id: 1}],
-      idVal: 0
+      terms: [
+        /*{term: 'dog', definition: 'canine pet', id: 1}*/
+      ],
     }
     this.handleInput = this.handleInput.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -16,14 +18,28 @@ class App extends React.Component {
   }
 
   handleInput(termObj) {
-    let newTerms = this.state.terms.slice();
-    termObj.id = this.state.idVal;
-    newVal = idVal + 1;
-    newTerms.push(termObj);
-    this.setState({
-      terms: newTerms,
-      idVal: newVal
-    })
+    // let newTerms = this.state.terms.slice();
+    // newTerms.push(termObj);
+    axios.post('/terms', termObj)
+      .then((res) => {
+        console.log(res.data, 'res.data from post');
+      })
+      .then(() => {
+        console.log('here trying to send a get request')
+        return axios.get(`/terms/${termObj.term}`)
+      })
+      .then((res) => {
+        console.log(res.data, 'res.data from get');
+        let newTerms = this.state.terms.slice();
+        newTerms.push(res.data);
+        this.setState({
+          terms: newTerms
+        });
+        console.log(this.state);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }
 
   handleEdit(target, editedObj) {
@@ -35,6 +51,9 @@ class App extends React.Component {
   }
 
   handleDelete(target) {
+    // don't delete anything until it's actually deleted from the database
+    // return id from handleDelete event/as target then use .filter
+    // to go through array and remove only that item with matching id
     console.log(target.id);
     let index;
     for (let i = 0; i < this.state.terms.length; i++) {

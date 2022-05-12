@@ -3,10 +3,11 @@ import React from "react";
 class GlossaryTerm extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props, 'in GlossaryTerm');
     this.state = {
-      term: this.props.term.term,
+      term: this.props.term.name,
       definition: this.props.term.definition,
-      id: this.props.term.id
+      id: this.props.term._id
     }
     // this.editOnClick = this.editOnClick.bind(this);
     this.deleteOnClick = this.deleteOnClick.bind(this);
@@ -14,17 +15,19 @@ class GlossaryTerm extends React.Component {
 
   deleteOnClick(e) {
     e.preventDefault();
-    console.log(this.state, 'deleteon clidk');
+    console.log(this.state, 'delete on clidk');
     this.props.handleDelete(this.state);
   }
 
   render() {
     return (
       <tr>
-        <td>{ this.state.term } : </td>
+        <td>{ this.state.term } </td>
         <td>{ this.state.definition } </td>
-        <button>Edit</button>
-        <button onClick={this.deleteOnClick}>Delete</button>
+        <td>
+          <button>Edit</button>
+          <button onClick={this.deleteOnClick}>Delete</button>
+        </td>
       </tr>
     )
   }
