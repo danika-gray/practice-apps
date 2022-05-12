@@ -43,7 +43,20 @@ app.post('/terms', (req, res) => {
   let termObj = { term: req.body.term, definition: req.body.definition }
   console.log(termObj);
 
-  database.saveTerm(termObj)
+  database.findOne(termObj.term)
+    .then((term) => {
+      console.log(term, 'term');
+      if (term === null) {
+        console.log('term not found, term=', term);
+        return database.saveTerm(termObj);
+      } else {
+        res.status(500).send('already saved term');
+      }
+    })
+    // .catch((err) => {
+    //   console.log('term not found', err);
+    //   return database.saveTerm(termObj);
+    // })
     .then(() => {
       console.log('success saving term');
       // return database.findOne(termObj.term) //'cat'

@@ -26,20 +26,12 @@ class App extends React.Component {
     axios.post('/terms', termObj)
       .then((res) => {
         console.log(res.data, 'res.data from post');
-      })
-      .then(() => {
-        console.log('here trying to send a get request')
-        // return axios.get(`/terms/${termObj.term}`)
+        console.log('here trying to send a get request');
+        console.log(termObj, 'termObj');
         this.getData(termObj.term);
       })
-      // .then((res) => {
-      //   console.log(res.data, 'res.data from get');
-      //   let newTerms = this.state.terms.slice();
-      //   newTerms.push(res.data);
-      //   this.setState({
-      //     terms: newTerms
-      //   });
-      //   console.log(this.state);
+      // .then(() => {
+
       // })
       .catch((err) => {
         alert(err);
@@ -53,8 +45,8 @@ class App extends React.Component {
       .then((res) => {
         console.log(res.data, 'res.data from get');
         let newTerms = this.state.terms.slice();
-        res.data.forEach((termObj) => {
-          newTerms.push(termObj);
+        res.data.forEach((obj) => {
+          newTerms.push(obj);
         });
         this.setState({
           terms: newTerms
@@ -65,7 +57,7 @@ class App extends React.Component {
         alert(err);
       });
     } else {
-      axios.get(`/terms/${termObj.term}`)
+      axios.get(`/terms/${term}`)
         .then((res) => {
           console.log(res.data, 'res.data from get');
           let newTerms = this.state.terms.slice();
@@ -73,7 +65,7 @@ class App extends React.Component {
           this.setState({
             terms: newTerms
           });
-          console.log(this.state);
+          console.log(this.state, 'this.state after get for posted term or searched term');
         })
         .catch((err) => {
           alert(err);
