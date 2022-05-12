@@ -14,12 +14,12 @@ app.use(express.static(path.join(__dirname, "../client/dist")));
 
 app.get('/terms', (req, res) => {
   database.findAll()
-    .then((terms) => {
-      console.log(terms, 'terms');
-      res.setStatus(200).send(data);
+    .then((data) => {
+      console.log(data, 'terms');
+      res.status(200).send(data);
     })
     .catch((err) => {
-      res.setStatus(500).send('error retrieving data');
+      res.status(500).send('error retrieving data');
     });
 });
 
