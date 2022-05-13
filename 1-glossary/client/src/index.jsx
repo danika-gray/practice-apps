@@ -14,6 +14,7 @@ class App extends React.Component {
     }
     this.getData = this.getData.bind(this);
     this.handleNewInput = this.handleNewInput.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     //this.handleEdit = this.handleEdit.bind(this);
     //this.handleDelete = this.handleDelete.bind(this);
   }
@@ -25,25 +26,22 @@ class App extends React.Component {
   handleNewInput(termObj) {
     axios.post('/terms', termObj)
       .then((res) => {
-        console.log(res.data, 'res.data from post');
-        console.log('here trying to send a get request');
-        console.log(termObj, 'termObj');
+        // console.log(res.data, 'res.data from post');
+        // console.log('here trying to send a get request');
+        // console.log(termObj, 'termObj');
         this.getData(termObj.term);
       })
-      // .then(() => {
-
-      // })
       .catch((err) => {
         alert(err);
       });
   }
 
   getData(term) {
-    console.log('here in getData');
+    //console.log('here in getData');
     if (term === undefined) {
       axios.get('/terms')
       .then((res) => {
-        console.log(res.data, 'res.data from get');
+        //console.log(res.data, 'res.data from get');
         let newTerms = this.state.terms.slice();
         res.data.forEach((obj) => {
           newTerms.push(obj);
@@ -51,7 +49,7 @@ class App extends React.Component {
         this.setState({
           terms: newTerms
         });
-        console.log(this.state);
+        //console.log(this.state);
       })
       .catch((err) => {
         alert(err);
@@ -59,19 +57,25 @@ class App extends React.Component {
     } else {
       axios.get(`/terms/${term}`)
         .then((res) => {
-          console.log(res.data, 'res.data from get');
+          //console.log(res.data, 'res.data from get');
           let newTerms = this.state.terms.slice();
           newTerms.push(res.data);
           this.setState({
             terms: newTerms
           });
-          console.log(this.state, 'this.state after get for posted term or searched term');
+          //console.log(this.state, 'this.state after get for posted term or searched term');
         })
         .catch((err) => {
           alert(err);
         });
     }
   }
+
+  handleSearch(searchTerm) {
+    // go through current state to find match or partial matches to input
+    // if not found display message?
+    // if found, do get request
+  };
 
   // handleEdit(target, editedObj) {
   //   let editedTerms = this.state.terms.splice(index, 1, editedObj);

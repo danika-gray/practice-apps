@@ -53,26 +53,19 @@ app.post('/terms', (req, res) => {
         res.status(500).send('already saved term');
       }
     })
-    // .catch((err) => {
-    //   console.log('term not found', err);
-    //   return database.saveTerm(termObj);
-    // })
     .then(() => {
       console.log('success saving term');
       // return database.findOne(termObj.term) //'cat'
       res.status(201).send('term saved!');
     })
-    // .then((data) => {
-    //   console.log(data._id, 'data id in post');
-    //   let newID = data._id.toString();
-    //   console.log(newID, 'newID in post');
-    //   res.status(201).send({newID: newID});
-    // })
     .catch((err) => {
       console.log('error', err)
       res.status(500).send('error saving data');
     });
 });
+
+// app.delete()
+// app.put()
 
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);

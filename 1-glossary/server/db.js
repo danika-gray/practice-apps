@@ -28,6 +28,14 @@ module.exports.saveTerm = (data) => {
   return savedTerm.save();
 }
 
+module.exports.delete = (id) => {
+  return Term.findByIdAndDelete(id);
+}
+
+module.exports.update(id, newData) {
+  return Term.findByIdAndUpdate(id, {/** updated field(s): new values */});
+}
+
 
 module.exports.Term = Term;
 

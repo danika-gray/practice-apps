@@ -41,3 +41,4 @@ class GlossaryTerm extends React.Component {
 // );
 
 export default GlossaryTerm;
+
