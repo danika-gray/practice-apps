@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Purchase = (props) => {
-  console.log('Purchase!');
-  return;
+  return (
+    <div>PURCHASE!</div>
+  )
 };
 
 export default Purchase;

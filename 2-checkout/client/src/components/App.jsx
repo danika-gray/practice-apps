@@ -44,6 +44,42 @@ class App extends React.Component {
     // do same thing for forms 2&3 and then handle purchase
   }
 
+  handleSecondForm(data) {
+    console.log(data, 'data in second form');
+    axios.post('/checkout/form2', data)
+      .then((res) => {
+        console.log(res.data, 'res.data');
+
+        this.setState({
+          secondFormComplete: true
+        })
+      })
+      .catch((err) => {
+        alert(err);
+      })
+  }
+
+  handleThirdForm(data) {
+    console.log(data, 'data in third form');
+    axios.post('/checkout/form3', data)
+      .then((res) => {
+        console.log(res.data, 'res.data');
+
+        this.setState({
+          thirdFormComplete: true
+        })
+      })
+      .catch((err) => {
+        alert(err);
+      })
+  }
+
+  handlePurchase() {
+    this.setState({
+      purchaseClicked: true
+    })
+  }
+
   render() {
     if (this.state.checkoutClicked && !this.state.firstFormComplete) {
       return (
@@ -51,13 +87,13 @@ class App extends React.Component {
       );
     } else if (this.state.firstFormComplete && !this.state.secondFormComplete) {
       return (
-        < Form2 />
+        < Form2 secondHandler={this.handleSecondForm}/>
       );
     } else if (this.state.secondFormComplete && !this.state.thirdFormComplete) {
       return (
-        < Form3 />
+        < Form3 thirdHandler={this.handleThirdForm}/>
       );
-    } else if (this.state.secondFormComplete && !this.state.purchaseClicked) {
+    } else if (this.state.thirdFormComplete && !this.state.purchaseClicked) {
       return (
         < Purchase />
       );

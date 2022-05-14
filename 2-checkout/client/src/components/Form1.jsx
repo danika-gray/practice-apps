@@ -1,12 +1,5 @@
 import React from 'react';
 
-// const Form1 = (props) => {
-//   console.log('form1!');
-//   return (
-//     <div>FORM1</div>
-//   )
-// };
-
 class Form1 extends React.Component {
   constructor(props) {
     super(props);
