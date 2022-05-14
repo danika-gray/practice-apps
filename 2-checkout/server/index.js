@@ -82,8 +82,8 @@ app.get('/responses/:id', (req, res) => {
   let queryString = 'SELECT * FROM  responses WHERE id=?;';
   db.queryAsync(queryString, [req.params.id])
     .then((data) => {
-      console.log(data, 'data from get');
-      res.status(200).send(data);
+      console.log(data[0][0], 'data from get');
+      res.status(200).send(data[0][0]);
     })
     .catch((err) => {
       console.log(err, 'err in get');

@@ -14,12 +14,14 @@ class App extends React.Component {
       secondFormComplete: false,
       thirdFormComplete: false,
       purchaseClicked: false,
-      sessionId: undefined
+      sessionId: undefined,
+      sessionData: {}
     };
     this.handleCheckout = this.handleCheckout.bind(this);
     this.handleFirstForm = this.handleFirstForm.bind(this);
     this.handleSecondForm = this.handleSecondForm.bind(this);
     this.handleThirdForm = this.handleThirdForm.bind(this);
+    this.handlePurchase = this.handlePurchase.bind(this);
   }
 
   handleCheckout() {
@@ -69,7 +71,25 @@ class App extends React.Component {
     axios.patch('/checkout/form3', data)
       .then((res) => {
         console.log(res.data, 'res.data');
+        this.getData(this.state.sessionId);
+      })
+      .catch((err) => {
+        alert(err);
+      })
+  }
 
+  getData(id) {
+    console.log('current id', id);
+    axios.get(`/responses/${id}`)
+      .then((res) => {
+        console.log(res.data, 'res.data in get');
+        this.setState({
+          sessionData: res.data
+        })
+        console.log(this.state, 'this.state');
+      })
+      .then(() => {
+        console.log(this.state, 'this.state');
         this.setState({
           thirdFormComplete: true
         })
@@ -79,7 +99,10 @@ class App extends React.Component {
       })
   }
 
-  handlePurchase() {
+  handlePurchase(e) {
+    e.preventDefault();
+    console.log('purchase clicked!');
+
     this.setState({
       purchaseClicked: true
     })
@@ -100,11 +123,12 @@ class App extends React.Component {
       );
     } else if (this.state.thirdFormComplete && !this.state.purchaseClicked) {
       return (
-        < Purchase />
+        < Purchase session={this.state.sessionData} handler={this.handlePurchase}/>
       );
     } else {
       return (
         <div>
+          <h1>Home Page</h1>
           <button onClick={this.handleCheckout}>CheckOut</button>
         </div>
       )
