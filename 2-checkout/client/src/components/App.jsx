@@ -64,9 +64,9 @@ class App extends React.Component {
   }
 
   handleThirdForm(data) {
-    data[id] = this.state.sessionId;
+    data.id = this.state.sessionId;
     console.log(data, 'data in third form with id added');
-    axios.post('/checkout/form3', data)
+    axios.patch('/checkout/form3', data)
       .then((res) => {
         console.log(res.data, 'res.data');
 

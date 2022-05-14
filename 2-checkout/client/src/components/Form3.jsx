@@ -34,7 +34,7 @@ class Form3 extends React.Component {
   handleCVVChange(e) {
     e.preventDefault();
     this.setState({
-      ccv: e.target.value
+      cvv: e.target.value
     })
   }
 
