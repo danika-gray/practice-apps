@@ -18,6 +18,8 @@ class App extends React.Component {
     };
     this.handleCheckout = this.handleCheckout.bind(this);
     this.handleFirstForm = this.handleFirstForm.bind(this);
+    this.handleSecondForm = this.handleSecondForm.bind(this);
+    this.handleThirdForm = this.handleThirdForm.bind(this);
   }
 
   handleCheckout() {
@@ -36,6 +38,7 @@ class App extends React.Component {
           firstFormComplete: true,
           sessionId: res.data.id
         })
+        console.log(this.state.sessionId);
       })
       .catch((err) => {
         alert(err);
@@ -43,7 +46,9 @@ class App extends React.Component {
   }
 
   handleSecondForm(data) {
-    data[id] = this.state.sessionId;
+    console.log(this.state.sessionId);
+    console.log(data, 'data in second form');
+    data.id = this.state.sessionId;
     console.log(data, 'data in second form with id added');
     axios.patch('/checkout/form2', data)
       .then((res) => {

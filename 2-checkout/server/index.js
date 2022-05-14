@@ -52,8 +52,9 @@ app.post('/checkout/form1', (req, res) => {
 
 app.patch('/checkout/form2', (req, res) => {
   console.log(req.body, 'req.body'); // expect checkout form2 data
-  let queryString = 'INSERT INTO responses(addressline1, addressline2, city, state, zip, phone) VALUES (?, ?, ?, ?, ?, ?) WHERE id=?';
-  db.queryAsync(queryString, [req.body.line1, req.body.line2, req.body.city, req.body.state, req.body.zip, req.body.phone, req.body.id])
+  let id = req.body.id.toString();
+  let queryString = 'UPDATE responses SET addressline1=?, addressline2=?, city=?, state=?, zip=?, phone=? WHERE id=?;';
+  db.queryAsync(queryString, [req.body.line1, req.body.line2, req.body.city, req.body.state, req.body.zip, req.body.phone, id])
     .then(() => {
       res.status(201).send('data saved');
     })
@@ -65,7 +66,7 @@ app.patch('/checkout/form2', (req, res) => {
 
 app.patch('/checkout/form3', (req, res) => {
   console.log(req.body, 'req.body'); // expect checkout form1 data
-  let queryString = 'INSERT INTO responses(creditCardNum, expDate, CCV, billingZip) VALUES (?, ?, ?, ?) WHERE id=?';
+  let queryString = 'UPDATE responses SET creditCardNum=?, expDate=?, CCV=?, billingZip=? WHERE id=?;';
   db.queryAsync(queryString, [req.body.cc, req.body.expDate, req.body.ccv, req.body.billingZip, req.body.id])
     .then(() => {
       res.status(201).send('data saved');

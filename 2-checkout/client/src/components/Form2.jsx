@@ -13,7 +13,10 @@ class Form2 extends React.Component {
     }
     this.handleLine1Change = this.handleLine1Change.bind(this);
     this.handleLine2Change = this.handleLine2Change.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleCityChange = this.handleCityChange.bind(this);
+    this.handleStateChange = this.handleStateChange.bind(this);
+    this.handleZipChange = this.handleZipChange.bind(this);
+    this.handlePhoneChange = this.handlePhoneChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
