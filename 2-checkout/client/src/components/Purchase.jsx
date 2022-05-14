@@ -7,23 +7,26 @@ const Purchase = ({session, handler}) => {
   return (
     <div>
       <div>CONFIRMATION</div>
-        <div>Contact:
+        <div>
+        <h2>Contact:</h2>
         <div>Name: {session.name}</div>
         <div>Email: {session.email}</div>
-        <div>Password: {session.password} characters</div>
+        <div>Password: {session.password}</div>
       </div>
-      <div>Address:
-        <div>Line1: {session.line1}</div>
-        <div>Line2: {session.line2}</div>
+      <div>
+        <h2>Address:</h2>
+        <div>Line1: {session.addressline1}</div>
+        <div>Line2: {session.addressline2}</div>
         <div>City: {session.city}</div>
         <div>State: {session.state}</div>
         <div>Zipcode: {session.zip}</div>
         <div>Phone Number: {session.phone}</div>
       </div>
-      <div>Billing:
-        <div>Credit Card #: {session.cc}</div>
+      <div>
+        <h2>Billing:</h2>
+        <div>Credit Card #: {session.creditCardNum}</div>
         <div>Expiration Date: {session.expDate}</div>
-        <div>CVV: {session.cvv} </div>
+        <div>CVV: {session.CVV} </div>
         <div>Billing Zipcode: {session.billingZip} </div>
       </div>
       <button onClick={handler}>Purchase</button>

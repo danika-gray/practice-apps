@@ -66,8 +66,8 @@ app.patch('/checkout/form2', (req, res) => {
 
 app.patch('/checkout/form3', (req, res) => {
   console.log(req.body, 'req.body'); // expect checkout form1 data
-  let queryString = 'UPDATE responses SET creditCardNum=?, expDate=?, CCV=?, billingZip=? WHERE id=?;';
-  db.queryAsync(queryString, [req.body.cc, req.body.expDate, req.body.ccv, req.body.billingZip, req.body.id])
+  let queryString = 'UPDATE responses SET creditCardNum=?, expDate=?, CVV=?, billingZip=? WHERE id=?;';
+  db.queryAsync(queryString, [req.body.cc, req.body.expDate, req.body.cvv, req.body.billingZip, req.body.id])
     .then(() => {
       res.status(201).send('data saved');
     })
