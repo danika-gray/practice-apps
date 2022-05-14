@@ -13,8 +13,9 @@ class App extends React.Component {
       firstFormComplete: false,
       secondFormComplete: false,
       thirdFormComplete: false,
-      purchaseClicked: false
-    }
+      purchaseClicked: false,
+      sessionId: undefined
+    };
     this.handleCheckout = this.handleCheckout.bind(this);
     this.handleFirstForm = this.handleFirstForm.bind(this);
   }
@@ -32,21 +33,19 @@ class App extends React.Component {
         console.log(res.data, 'res.data');
 
         this.setState({
-          firstFormComplete: true
+          firstFormComplete: true,
+          sessionId: res.data.id
         })
       })
       .catch((err) => {
         alert(err);
       })
-    // send data here in object form once all fields are complete
-    // then send data to database with post
-    // upon return change state to true and move on to form2
-    // do same thing for forms 2&3 and then handle purchase
   }
 
   handleSecondForm(data) {
-    console.log(data, 'data in second form');
-    axios.post('/checkout/form2', data)
+    data[id] = this.state.sessionId;
+    console.log(data, 'data in second form with id added');
+    axios.patch('/checkout/form2', data)
       .then((res) => {
         console.log(res.data, 'res.data');
 
@@ -60,7 +59,8 @@ class App extends React.Component {
   }
 
   handleThirdForm(data) {
-    console.log(data, 'data in third form');
+    data[id] = this.state.sessionId;
+    console.log(data, 'data in third form with id added');
     axios.post('/checkout/form3', data)
       .then((res) => {
         console.log(res.data, 'res.data');

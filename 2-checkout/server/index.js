@@ -23,18 +23,26 @@ app.use(express.json());
 
 app.post('/checkout/form1', (req, res) => {
   console.log(req.body, 'req.body'); // expect checkout form1 data
-
-  let queryString = 'INSERT INTO responses(name, email, password) VALUES (?, ?, ?);';
-  db.query(queryString, [req.body.name, req.body.email, req.body.password])
+  // avoid duplicates
+  db.queryAsync('SELECT * FROM responses WHERE name=?;', [req.body.name])
+    .then((data) => {
+      if (req.body.name === data.name && req.body.password === data.password) {
+        console.log('data already in db');
+        res.status(201).send('data saved');
+      } else {
+        console.log('data not already in db');
+        return db.queryAsync('INSERT INTO responses(name, email, password) VALUES (?, ?, ?);', [req.body.name, req.body.email, req.body.password])
+      }
+    })
     .then(() => {
-      return db.query('SELECT id FROM responses WHERE name=?', [req.body.name]);
-      // res.status(201).send('data saved');
+      console.log('success adding values to db');
+      return db.queryAsync('SELECT id FROM responses WHERE name=?', [req.body.name]);
     })
     .then((id) => {
-      console.log(id, 'id');
-      res.status(201).send({id: id});
-      // on the front end, copy id and save in state, send with second and third form
-      // data
+      (console.log('success getting id!'));
+      console.log(id[0], 'id[0]');
+      console.log(id[0][0], 'id?');
+      res.status(201).send(id[0][0]);
     })
     .catch((err) => {
       console.log('err', err);
@@ -43,9 +51,9 @@ app.post('/checkout/form1', (req, res) => {
 })
 
 app.patch('/checkout/form2', (req, res) => {
-  console.log(req.body, 'req.body'); // expect checkout form1 data
+  console.log(req.body, 'req.body'); // expect checkout form2 data
   let queryString = 'INSERT INTO responses(addressline1, addressline2, city, state, zip, phone) VALUES (?, ?, ?, ?, ?, ?) WHERE id=?';
-  db.query(queryString, [req.body.line1, req.body.line2, req.body.city, req.body.state, req.body.zip, req.body.phone, req.body.id])
+  db.queryAsync(queryString, [req.body.line1, req.body.line2, req.body.city, req.body.state, req.body.zip, req.body.phone, req.body.id])
     .then(() => {
       res.status(201).send('data saved');
     })
@@ -58,7 +66,7 @@ app.patch('/checkout/form2', (req, res) => {
 app.patch('/checkout/form3', (req, res) => {
   console.log(req.body, 'req.body'); // expect checkout form1 data
   let queryString = 'INSERT INTO responses(creditCardNum, expDate, CCV, billingZip) VALUES (?, ?, ?, ?) WHERE id=?';
-  db.query(queryString, [req.body.cc, req.body.expDate, req.body.ccv, req.body.billingZip, req.body.id])
+  db.queryAsync(queryString, [req.body.cc, req.body.expDate, req.body.ccv, req.body.billingZip, req.body.id])
     .then(() => {
       res.status(201).send('data saved');
     })
@@ -71,7 +79,7 @@ app.patch('/checkout/form3', (req, res) => {
 app.get('/responses/:id', (req, res) => {
   console.log(req.params.id, 'req.params.id');
   let queryString = 'SELECT * FROM  responses WHERE id=?;';
-  db.query(queryString, [req.params.id])
+  db.queryAsync(queryString, [req.params.id])
     .then((data) => {
       console.log(data, 'data from get');
       res.status(200).send(data);
