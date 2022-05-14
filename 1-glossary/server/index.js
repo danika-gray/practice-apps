@@ -13,9 +13,10 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
 app.get('/terms', (req, res) => {
+  console.log('here in top app.get');
   database.findAll()
     .then((data) => {
-      console.log(data, 'terms');
+      //console.log(data, 'terms');
       res.status(200).send(data);
     })
     .catch((err) => {
@@ -23,25 +24,39 @@ app.get('/terms', (req, res) => {
     });
 });
 
-app.get('/terms/:termname', (req, res) => {
-  console.log(req.params.termname, 'req.params.termname');
+app.get('/term/:termname', (req, res) => {
   let termname = req.params.termname;
-  console.log(termname, 'termname');
 
   database.findOne(termname)
     .then((data) => {
-      console.log(data, 'terms');
+      console.log(data, 'term');
       res.status(200).send(data);
     })
     .catch((err) => {
+      res.status(500).send('error retrieving data');
+    });
+});
+
+app.get('/terms/?search=:text', (req, res) => {
+  //console.log(req.params.text);
+  let search = req.params.text;
+
+  database.search(search)
+    .then((data) => {
+      //console.log(data, 'term(s) from search');
+      let searchResult = data[0].concat(data[1]);
+      //console.log(searchResult, 'data after concat');
+      res.status(200).send(searchResult);
+    })
+    .catch((err) => {s
       res.status(500).send('error retrieving data');
     });
 });
 
 app.post('/terms', (req, res) => {
-  console.log(req.body, 'req.body');
+  //console.log(req.body, 'req.body');
   let termObj = { term: req.body.term, definition: req.body.definition }
-  console.log(termObj);
+  //console.log(termObj);
 
   database.findOne(termObj.term)
     .then((term) => {
@@ -54,12 +69,12 @@ app.post('/terms', (req, res) => {
       }
     })
     .then(() => {
-      console.log('success saving term');
+      //console.log('success saving term');
       // return database.findOne(termObj.term) //'cat'
       res.status(201).send('term saved!');
     })
     .catch((err) => {
-      console.log('error', err)
+      //console.log('error', err)
       res.status(500).send('error saving data');
     });
 });

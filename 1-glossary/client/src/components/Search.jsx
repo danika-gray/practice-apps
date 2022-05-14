@@ -18,12 +18,12 @@ class Search extends React.Component {
   }
 
   handleSubmit(e) {
-    e.preventDefault;
-    let term = this.state.text;
-    this.setState({
-      text: ''
-    })
-    this.props.handler(term);
+    e.preventDefault();
+    // let term = this.state.text;
+    // this.setState({
+    //   text: ''
+    // })
+    this.props.handler(this.state.text);
   }
 
   render() {

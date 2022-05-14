@@ -51,7 +51,7 @@ class App extends React.Component {
         alert(err);
       });
     } else {
-      axios.get(`/terms/${term}`)
+      axios.get(`/term/${term}`)
         .then((res) => {
           let newTerms = this.state.terms.slice();
           newTerms.push(res.data);
@@ -65,9 +65,9 @@ class App extends React.Component {
     }
   }
 
-  handleSearch(searchTerm) {
-    console.log(searchTerm, 'searchTerm');
-    axios.get(`/terms/?search=${searchTerm}`)
+  handleSearch(text) {
+    console.log(text, 'searched text');
+    axios.get(`/terms/search=${text}`)
       .then((res) => {
         console.log(res.data, 'res.data in get in search handler');
 
