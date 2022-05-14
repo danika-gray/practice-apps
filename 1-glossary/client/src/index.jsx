@@ -3,14 +3,16 @@ import axios from "axios";
 import { render } from "react-dom";
 import GlossaryList from "./components/glossaryList.jsx";
 import InputTerm from "./components/inputTerm.jsx";
+import Search from "./components/Search.jsx";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      terms: [
-        /*{term: 'dog', definition: 'canine pet', id: 1}*/
-      ],
+      terms: [],
+      searchTerms: [],
+      searchFound: false,
+      searchNotFound: false
     }
     this.getData = this.getData.bind(this);
     this.handleNewInput = this.handleNewInput.bind(this);
@@ -26,9 +28,6 @@ class App extends React.Component {
   handleNewInput(termObj) {
     axios.post('/terms', termObj)
       .then((res) => {
-        // console.log(res.data, 'res.data from post');
-        // console.log('here trying to send a get request');
-        // console.log(termObj, 'termObj');
         this.getData(termObj.term);
       })
       .catch((err) => {
@@ -37,11 +36,9 @@ class App extends React.Component {
   }
 
   getData(term) {
-    //console.log('here in getData');
     if (term === undefined) {
       axios.get('/terms')
       .then((res) => {
-        //console.log(res.data, 'res.data from get');
         let newTerms = this.state.terms.slice();
         res.data.forEach((obj) => {
           newTerms.push(obj);
@@ -49,7 +46,6 @@ class App extends React.Component {
         this.setState({
           terms: newTerms
         });
-        //console.log(this.state);
       })
       .catch((err) => {
         alert(err);
@@ -57,13 +53,11 @@ class App extends React.Component {
     } else {
       axios.get(`/terms/${term}`)
         .then((res) => {
-          //console.log(res.data, 'res.data from get');
           let newTerms = this.state.terms.slice();
           newTerms.push(res.data);
           this.setState({
             terms: newTerms
           });
-          //console.log(this.state, 'this.state after get for posted term or searched term');
         })
         .catch((err) => {
           alert(err);
@@ -72,10 +66,26 @@ class App extends React.Component {
   }
 
   handleSearch(searchTerm) {
-    // go through current state to find match or partial matches to input
-    // if not found display message?
-    // if found, do get request
-  };
+    console.log(searchTerm, 'searchTerm');
+    axios.get(`/terms/?search=${searchTerm}`)
+      .then((res) => {
+        console.log(res.data, 'res.data in get in search handler');
+
+        if (res.data.length === 0) {
+          this.setState({
+            searchNotFound: true
+          })
+        } else {
+          this.setState({
+            searchTerms: res.data,
+            searchFound: true
+          })
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      })
+  }
 
   // handleEdit(target, editedObj) {
   //   let editedTerms = this.state.terms.splice(index, 1, editedObj);
@@ -111,11 +121,14 @@ class App extends React.Component {
       <div>
          <p>HELLO WORLD</p>
           <InputTerm handler={this.handleNewInput} />
-          <GlossaryList terms={this.state.terms} handleEdit={this.handleEdit}
-          handleDelete={this.handleDelete}/>
+          <Search handler={this.handleSearch} />
+          <div> {this.state.searchNotFound ? <h2>Term Not Found</h2> : null } </div>
+          <GlossaryList terms={this.state.searchFound ? this.state.searchTerms : this.state.terms}/>
       </div>
     )
   }
 };
 
 render( <App />, document.getElementById("root"))
+
+// handleEdit={this.handleEdit} handleDelete={this.handleDelete}

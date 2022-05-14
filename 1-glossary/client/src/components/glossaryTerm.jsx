@@ -3,7 +3,7 @@ import React from "react";
 class GlossaryTerm extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props, 'in GlossaryTerm');
+    //console.log(this.props, 'in GlossaryTerm');
     this.state = {
       term: this.props.term.name,
       definition: this.props.term.definition,
@@ -15,7 +15,7 @@ class GlossaryTerm extends React.Component {
 
   deleteOnClick(e) {
     e.preventDefault();
-    console.log(this.state, 'delete on clidk');
+    console.log(this.state, 'delete on click');
     this.props.handleDelete(this.state);
   }
 

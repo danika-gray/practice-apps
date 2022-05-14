@@ -12,8 +12,8 @@ const GlossaryList = ({terms, handleEdit, handleDelete}) => (
     </thead>
     <tbody>
       {terms.map((term) => {
-        console.log(term, 'term in glossaryList');
-        console.log(term._id, 'term id');
+        // console.log(term, 'term in glossaryList');
+        // console.log(term._id, 'term id');
         return (< GlossaryTerm term={term} key={term._id} handleEdit={handleEdit}
         handleDelete={handleDelete}/>);
       })}
