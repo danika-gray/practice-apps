@@ -35,7 +35,13 @@ module.exports.saveTerm = (data) => {
 }
 
 module.exports.delete = (id) => {
+  console.log(id, 'id in delete');
   return Term.findByIdAndDelete(id);
+}
+
+module.exports.findById = (id) => {
+  console.log(id, 'id in findById');
+  return Term.findById(id);
 }
 
 // module.exports.update(id, newData) {

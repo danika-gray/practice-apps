@@ -28,10 +28,12 @@ class InputTerm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
-    let termObj = {};
-    termObj.term = this.state.term;
-    termObj.definition = this.state.definition;
+    let termObj = this.state;
+    console.log(termObj, 'termObj');
+    this.setState({
+      term: '',
+      definition: ''
+    })
 
     //console.log(termObj);
     this.props.handler(termObj);
@@ -42,11 +44,11 @@ class InputTerm extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label>
           Term:
-          <input type="text" value={this.state.term} onChange={this.handleTermChange}/>
+          <input type="text" placeholder="term" value={this.state.term} onChange={this.handleTermChange}/>
         </label>
         <label>
           Definition:
-          <input type="text" value={this.state.definition} onChange={this.handleDefChange}/>
+          <input type="text" placeholder="definition" value={this.state.definition} onChange={this.handleDefChange}/>
         </label>
         <input type="submit" value="Submit"/>
       </form>

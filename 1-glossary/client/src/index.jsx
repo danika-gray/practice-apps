@@ -18,7 +18,7 @@ class App extends React.Component {
     this.handleNewInput = this.handleNewInput.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     //this.handleEdit = this.handleEdit.bind(this);
-    //this.handleDelete = this.handleDelete.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -94,27 +94,39 @@ class App extends React.Component {
   //   })
   // }
 
-  // handleDelete(target) {
-  //   // don't delete anything until it's actually deleted from the database
-  //   // return id from handleDelete event/as target then use .filter
-  //   // to go through array and remove only that item with matching id
-  //   console.log(target.id);
-  //   let index;
-  //   for (let i = 0; i < this.state.terms.length; i++) {
-  //     console.log(this.state.terms[i].id, 'in forloop');
-  //     console.log(target.id, 'in forloop');
-  //     if (this.state.terms[i].id === target.id) {
-  //       console.log('here in if condition');
-  //       index = i;
-  //       break;
-  //     }
-  //   }
-  //   console.log(index, 'index in delete');
-  //   let editedTerms = this.state.terms.splice(index, 1);
-  //   this.setState({
-  //     terms: editedTerms
-  //   })
-  // }
+  handleDelete(target) {
+    console.log(target, 'target in handle delete');
+    axios.delete(`/terms/${target._id}`)
+      .then((res) => {
+        console.log(res.data, 'res.data in delete');
+
+        let termsCopy = this.state.terms.slice();
+        console.log(termsCopy, 'termsCopy');
+        let newTerms = termsCopy.filter((term) => {
+          if (term._id !== target._id) {
+            return true;
+          }
+        });
+        console.log(newTerms, 'terms after filter');
+        if (this.state.searchTerms.length !== 0) {
+          let searchTermsCopy = this.state.searchTerms.slice();
+          newSearchTerms = searchTermsCopy.filter((term) => {
+            if (term._id !== target._id) {
+              return true;
+            }
+          });
+          this.setState({
+            searchTerms: newSearchTerms
+          })
+        }
+        this.setState({
+          terms: newTerms
+        });
+      })
+      .catch((err) => {
+        alert(err);
+      })
+  }
 
   render() {
     return (
@@ -123,7 +135,8 @@ class App extends React.Component {
           <InputTerm handler={this.handleNewInput} />
           <Search handler={this.handleSearch} />
           <div> {this.state.searchNotFound ? <h2>Term Not Found</h2> : null } </div>
-          <GlossaryList terms={this.state.searchFound ? this.state.searchTerms : this.state.terms}/>
+          <GlossaryList terms={this.state.searchFound ? this.state.searchTerms : this.state.terms}
+          deleteHander={this.handleDelete}/>
       </div>
     )
   }
