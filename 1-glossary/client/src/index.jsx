@@ -17,8 +17,8 @@ class App extends React.Component {
     this.getData = this.getData.bind(this);
     this.handleNewInput = this.handleNewInput.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
-    //this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
   }
 
   componentDidMount() {
@@ -66,11 +66,8 @@ class App extends React.Component {
   }
 
   handleSearch(text) {
-    console.log(text, 'searched text');
     axios.get(`/terms/search=${text}`)
       .then((res) => {
-        console.log(res.data, 'res.data in get in search handler');
-
         if (res.data.length === 0) {
           this.setState({
             searchNotFound: true
@@ -86,13 +83,6 @@ class App extends React.Component {
         alert(err);
       })
   }
-
-  // handleEdit(target, editedObj) {
-  //   let editedTerms = this.state.terms.splice(index, 1, editedObj);
-  //   this.setState({
-  //     terms: editedTerms
-  //   })
-  // }
 
   handleDelete(target) {
     console.log(target, 'target in handle delete');
@@ -128,15 +118,50 @@ class App extends React.Component {
       })
   }
 
+  handleEdit(editedObj) {
+    console.log(editedObj, 'editedObj');
+    console.log(typeof editedObj, 'editedObj');
+
+    // send editedObj with put request
+    axios.patch(`/terms/?edit=${editedObj._id.}`, editedObj)
+      .then((res) => {
+        console.log(res.data, 'res.data in handleEdit');
+        let termsCopy = this.state.terms.slice();
+        let newTerms = termsCopy.map((term) => {
+          if (term._id === editedObj._id) {
+            term.name = editedObj.name;
+            term.definition = editedObj.definition;
+          }
+          return term;
+        })
+        this.setState({
+          terms: newTerms
+        })
+        if (this.state.searchTerms.length !== 0) {
+          let searchTermsCopy = this.state.searchTerms.slice();
+          let newSearchTerms = searchTermsCopy.map((term) => {
+            if (term._id === editedObj._id) {
+              term.name = editedObj.name;
+              term.definition = editedObj.definition;
+            }
+            return term;
+          });
+          this.setState({
+            searchTerms: newSearchTerms
+          });
+        }
+      })
+  }
+
   render() {
     return (
       <div>
-         <p>HELLO WORLD</p>
+         <h2>GLOSSARY</h2>
           <InputTerm handler={this.handleNewInput} />
           <Search handler={this.handleSearch} />
           <div> {this.state.searchNotFound ? <h2>Term Not Found</h2> : null } </div>
           <GlossaryList terms={this.state.searchFound ? this.state.searchTerms : this.state.terms}
-          deleteHander={this.handleDelete}/>
+          deleteHander={this.handleDelete} editHandler={this.handleEdit}/>
       </div>
     )
   }

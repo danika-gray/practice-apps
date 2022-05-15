@@ -91,7 +91,19 @@ app.delete('/terms/:id', (req, res) => {
     })
 });
 
-// app.put()
+app.patch('/terms/?edit=:id', (req, res) => {
+  console.log(req.params.id, 'req.params.id in put');
+  console.log(req.body, 'req.body in put');
+
+  database.edit(req.body)
+    .then(() => {
+      console.log('editing successful');
+      res.status(200).send('edited data');
+    })
+    .catch((err) => {
+      res.status(500).send('error updating data');
+    })
+})
 
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);

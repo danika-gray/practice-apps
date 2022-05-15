@@ -5,12 +5,17 @@ class GlossaryTerm extends React.Component {
     super(props);
     //console.log(this.props, 'in GlossaryTerm');
     this.state = {
-      term: this.props.term.name,
+      name: this.props.term.name,
       definition: this.props.term.definition,
-      id: this.props.term._id
+      id: this.props.term._id,
+      editing: false
     }
     // this.editOnClick = this.editOnClick.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleEditButton = this.handleEditButton.bind(this);
+    this.handleTermEdit = this.handleTermEdit.bind(this);
+    this.handleDefinitionEdit = this.handleDefinitionEdit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleDelete(e) {
@@ -19,14 +24,53 @@ class GlossaryTerm extends React.Component {
     this.props.deleteHander(this.props.term); // should pass back term obj to be deleted
   }
 
+  handleEditButton() {
+    this.setState({
+      editing: true
+    })
+  }
+
+  handleTermEdit(e) {
+    e.preventDefault();
+    this.setState({
+      name: e.target.value
+    })
+  }
+
+  handleDefinitionEdit(e) {
+    e.preventDefault();
+    this.setState({
+      definition: e.target.value
+    })
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(this.state.name);
+    console.log(this.state.definition);
+    this.setState({
+      editing: false
+    });
+    this.props.editHandler({
+      _id: this.state.id,
+      name: this.state.name,
+      defintion: this.state.defintion });
+  }
+
   render() {
     return (
       <tr>
-        <td>{ this.state.term }</td>
+        <td>{ this.state.name }</td>
         <td>{ this.state.definition }</td>
         <td>
-          <button>Edit</button>
           <button onClick={this.handleDelete}>Delete</button>
+          <button onClick={this.handleEditButton}>Edit</button>
+          {this.state.editing ?
+          <form onSubmit={this.handleSubmit}>
+            <input type="text" placeholder="edit term" value={this.state.name} onChange={this.handleTermEdit}/>
+            <input type="text" placeholder="edit definition" value={this.state.definition} onChange={this.handleDefinitionEdit}/>
+            <input type="submit" value="Submit"/>
+          </form> : null}
         </td>
       </tr>
     )

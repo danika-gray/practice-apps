@@ -29,13 +29,11 @@ class InputTerm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     let termObj = this.state;
-    console.log(termObj, 'termObj');
     this.setState({
       term: '',
       definition: ''
     })
 
-    //console.log(termObj);
     this.props.handler(termObj);
   }
 
