@@ -54,7 +54,7 @@ class GlossaryTerm extends React.Component {
     this.props.editHandler({
       _id: this.state.id,
       name: this.state.name,
-      defintion: this.state.defintion });
+      definition: this.state.definition });
   }
 
   render() {

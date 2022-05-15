@@ -91,11 +91,12 @@ app.delete('/terms/:id', (req, res) => {
     })
 });
 
-app.patch('/terms/?edit=:id', (req, res) => {
+app.put('/terms/:id', (req, res) => {
+  console.log('here in app.put');
   console.log(req.params.id, 'req.params.id in put');
   console.log(req.body, 'req.body in put');
 
-  database.edit(req.body)
+  database.update(req.params.id, {name: req.body.name, definition: req.body.definition})
     .then(() => {
       console.log('editing successful');
       res.status(200).send('edited data');

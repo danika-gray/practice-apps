@@ -46,7 +46,7 @@ module.exports.findById = (id) => {
 
 module.exports.update = (id, newData) => {
   console.log(newData, 'newData in update');
-  return Term.findByIdAndUpdate(id, newData);
+  return Term.findByIdAndUpdate(id, {name: newData.name, definition: newData.definition});
 }
 
 module.exports.Term = Term;

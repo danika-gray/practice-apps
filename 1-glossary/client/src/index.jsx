@@ -121,11 +121,16 @@ class App extends React.Component {
   handleEdit(editedObj) {
     console.log(editedObj, 'editedObj');
     console.log(typeof editedObj, 'editedObj');
+    let id = editedObj._id.toString();
+    console.log(typeof id, 'id after to string');
 
     // send editedObj with put request
-    axios.patch(`/terms/?edit=${editedObj._id.}`, editedObj)
+    axios.put(`/terms/${id}`, editedObj)
       .then((res) => {
-        console.log(res.data, 'res.data in handleEdit');
+        return axios.get(`/term/${editedObj.name}`);
+      })
+      .then((res) => {
+        console.log(res.data, 'res.data in handleEdit after get');
         let termsCopy = this.state.terms.slice();
         let newTerms = termsCopy.map((term) => {
           if (term._id === editedObj._id) {
@@ -150,6 +155,9 @@ class App extends React.Component {
             searchTerms: newSearchTerms
           });
         }
+      })
+      .catch((err) => {
+        alert(err);
       })
   }
 
